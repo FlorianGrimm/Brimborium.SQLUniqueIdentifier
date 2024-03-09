@@ -45,24 +45,41 @@ $v=$v.Substring(0,255)
 
 $g  = [System.Linq.Enumerable]::Range(0,100000) | %{ [Guid]::NewGuid() }
 $h = [System.Collections.ArrayList]::new()
-
+[long] $b1st=0x800000000000
+[long] $idx=0
 for($idx=0;$idx -lt $g.Count; $idx++) {
     $uuid = $g[$idx].ToString()
-    $a = ($idx -bor 0x80000000).ToString('X')
-    $b = $uuid.Substring(0, 28) + $a
+    $a = ($idx -bor $b1st).ToString('X')
+    $b = $uuid.Substring(0, 24) + $a
     $h.Add($b) | Out-Null
 }
 
 # the unordered insert statements
 
+'SET NOCOUNT ON;
+' | Out-File 'unordered.sql'
+
+$i=0
 $g | % {
     "INSERT INTO [dbo].[uid1] ([id],[v]) VALUES ('"+$_+"','"+$v+"');"
-} | Out-File 'C:\github.com\FlorianGrimm\Brimborium.SQLUniqueIdentifier\unordered.sql'
+	if (999 -eq ($i % 1000)){
+		"GO"
+	}
+	$i++
+} | Out-File 'unordered.sql' -Append
 
 # the ordered insert statements
 
+'SET NOCOUNT ON;
+' | Out-File 'ordered.sql'
+
+$i = 0
 $h | % {
     "INSERT INTO [dbo].[uid2] ([id],[v]) VALUES ('"+$_+"','"+$v+"');"
-} | Out-File 'C:\github.com\FlorianGrimm\Brimborium.SQLUniqueIdentifier\ordered.sql'
+	if (999 -eq ($i % 1000)){
+		"GO"
+	}
+	$i++
+} | Out-File 'ordered.sql' -Append
 
 #

@@ -9,7 +9,7 @@ IMHO: The SQL Server does not need to handle the fracmentation.
 
 The test is in testing\PerformanceTest.ps1, which generates 2 files which contains the inserts.
 I'm not sure how to really validate the performance of an SQL script. There are so many moving parts.
-But in my tests the performance was more than 20%.
+But in my tests the performance improvement was more than 20%.
 
 ## Usage
 
