@@ -114,6 +114,10 @@ The result:
 11111111-1111-1111-1111-211111111111
 ```
 
+## MS SQL 2022
+
+Tested this with MS SQL Server 2022 same performance benefits.
+
 ## Unknowns
 
 I don't know how this performce on other MS SQL Server versions - or other SQL Servers: Postgress, Oracle, ...
